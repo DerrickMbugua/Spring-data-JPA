@@ -1,25 +1,70 @@
 package com.example.demo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity(name = "Student")
+@Table(
+        name = "student",
+        uniqueConstraints = {
+                @UniqueConstraint( name = "student_email_unique", columnNames = "email")
+        }
+)
 public class Student {
 
     @Id
+    @SequenceGenerator(
+            name = "student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
+
+@Column(
+        name = "id",
+        updatable = false
+)
     private Long id;
-    private String name;
+
+    @Column(
+            name = "first_name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String firstName;
+
+    @Column(
+            name = "last_name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String lastName;
+
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String email;
-    private LocalDate dob;
+
+    @Column(
+            name = "age",
+            nullable = false
+    )
     private Integer age;
 
-    public Student(Long id, String name, String email, LocalDate dob, Integer age) {
-        this.id = id;
-        this.name = name;
+    public Student( String firstName, String lastName, String email, Integer age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
-        this.dob = dob;
         this.age = age;
+    }
+
+    public Student() {
+
     }
 
     public Long getId() {
@@ -30,12 +75,20 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -44,14 +97,6 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
     }
 
     public Integer getAge() {
@@ -66,9 +111,9 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", dob=" + dob +
                 ", age=" + age +
                 '}';
     }
